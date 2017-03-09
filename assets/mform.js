@@ -14,27 +14,29 @@ function mform_init() {
     if ($('#REX_FORM').length && mform.length) {
 
         var custom_link = mform.find('.custom-link'),
-            multiple_select = mform.find('.multiple-select');
+            tabs = mform.find('a[data-toggle="tab"]');
 
         if (custom_link.length) {
             mform_custom_link(custom_link);
         }
-        if (multiple_select.length) {
-            mform_multiple_select(multiple_select);
+        if (tabs.length) {
+            mform_tabs();
         }
     }
 }
 
-function mform_multiple_select(item) {
-    item.each(function(){
-        if ($(this).data('multiple-select') ==  $(this).attr('id'))
-        { } else  {
-            $(this).data('multiple-select', $(this).attr('id'));
-            $(this).change(function() {
-                $(this).next('input[type=hidden]').val($(this).val());
-            });
-        }
+function mform_tabs() {
+
+    $('.mform a[data-toggle="tab"]').on("shown.bs.tab", function (e) {
+        var id = $(e.target).attr("href");
+        localStorage.setItem('selectedTab', id)
     });
+
+    var selectedTab = localStorage.getItem('selectedTab');
+    if (selectedTab != null) {
+        $('.mform a[data-toggle="tab"][href="' + selectedTab + '"]').tab('show');
+    }
+
 }
 
 function mform_custom_link(item) {
